@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* 1. System Design Tokens for Global Contrast Framework */
+    --brand-nature-green-start: #112316;
+    --brand-nature-green-end: #1a3822;
+    --brand-saffron-canvas: #FFFBEB;   /* Warm, bright saffron-yellow center canvas */
+    --brand-cream-card: #FEFDF6;       /* Clean warm cream for inner component cards */
+    --text-organic-dark: #1c2e21;      /* Deep forest-charcoal text for high contrast on light areas */
+    --text-organic-light: #FDFBF4;     /* Cream white text for dark nature-green frames */
+  }
+
+  body {
+    /* bg-transparent lets the dynamic App.jsx frames control the page depth */
+    @apply text-brandNavy font-inter bg-transparent;
+    color: var(--text-organic-dark);
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-outfit;
+    color: var(--text-dark-organic);
+  }
+}
+
+/* 2. Premium Frosted Warm-Cream glassmorphism cards (Updated to match Cream-Card standards) */
+.glass-card {
+  background: rgba(254, 252, 245, 0.88); /* Increased opacity slightly for high-contrast text layout */
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(26, 56, 34, 0.08); /* Replaced weak yellow border with subtle organic green border tint */
+  box-shadow: 0 10px 32px 0 rgba(217, 119, 6, 0.04); /* Saffron shadow accentuation */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  color: var(--text-organic-dark) !important;
+}
+
+.glass-card:hover {
+  border-color: rgba(26, 56, 34, 0.18);
+  box-shadow: 0 12px 40px 0 rgba(217, 119, 6, 0.08);
+}
+
+/* Force standard inner fonts and text nodes to inherit the organic website theme color */
+.glass-card p, .glass-card span, .glass-card li {
+  color: rgba(28, 46, 33, 0.85); /* 85% opacity dark green-charcoal for optimal readability */
+}
+
+/* 3. Animated pulse hover for Saffron CTA button states */
+@keyframes saffronGlow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(217, 119, 6, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(217, 119, 6, 0);
+  }
+}
+
+.btn-glow {
+  animation: saffronGlow 2s infinite;
+}
+
+/* 4. Custom scrollbar matching brand colors */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--brand-saffron-canvas); /* Scrollbar track matches your saffron canvas layer */
+}
+::-webkit-scrollbar-thumb {
+  background: #ecdba2;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #e6d480;
+}
