@@ -3,6 +3,8 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Star, MessageSquare, AlertTriangle, ShieldAlert, Award } from 'lucide-react';
 
+const apiBase = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+
 export default function ReviewsPage({ user }) {
   const [reviews, setReviews] = useState([]);
   const [userRating, setUserRating] = useState(5);
@@ -22,7 +24,7 @@ export default function ReviewsPage({ user }) {
   const fetchReviews = async () => {
     setLoading(true);
     try {
-      const res = await axios.get('http://localhost:5000/api/feedback');
+      const res = await axios.get(`${apiBase}/api/feedback`);
       setReviews(res.data);
     } catch (err) {
       console.error('Error fetching testimonials:', err);
@@ -54,7 +56,7 @@ export default function ReviewsPage({ user }) {
           Authorization: `Bearer ${token}`
         }
       };
-      await axios.put(`http://localhost:5000/api/feedback/${id}`, {
+      await axios.put(`${apiBase}/api/feedback/${id}`, {
         rating: editingRating,
         comment: editingComment
       }, config);
@@ -79,7 +81,7 @@ export default function ReviewsPage({ user }) {
           Authorization: `Bearer ${token}`
         }
       };
-      await axios.delete(`http://localhost:5000/api/feedback/${id}`, config);
+      await axios.delete(`${apiBase}/api/feedback/${id}`, config);
 
       setFeedbackSuccess('Review deleted successfully.');
       fetchReviews();
@@ -107,7 +109,7 @@ export default function ReviewsPage({ user }) {
         }
       };
 
-      await axios.post('http://localhost:5000/api/feedback', {
+      await axios.post(`${apiBase}/api/feedback`, {
         rating: userRating,
         comment: userComment
       }, config);

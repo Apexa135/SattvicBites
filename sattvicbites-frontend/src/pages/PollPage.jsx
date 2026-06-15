@@ -3,6 +3,8 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Vote, CheckCircle, AlertTriangle, ShieldCheck } from 'lucide-react';
 
+const apiBase = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+
 export default function PollPage({ user }) {
   const [activePoll, setActivePoll] = useState(null);
   const [votedOptionId, setVotedOptionId] = useState('');
@@ -22,7 +24,7 @@ export default function PollPage({ user }) {
     setLoading(true);
     setErrorMsg('');
     try {
-      const res = await axios.get('http://localhost:5000/api/polls/active');
+      const res = await axios.get(`${apiBase}/api/polls/active`);
       const poll = res.data;
       setActivePoll(poll);
 
@@ -80,7 +82,7 @@ export default function PollPage({ user }) {
         }
       };
 
-      const res = await axios.post('http://localhost:5000/api/polls/vote', {
+      const res = await axios.post(`${apiBase}/api/polls/vote`, {
         optionId: votedOptionId
       }, config);
 

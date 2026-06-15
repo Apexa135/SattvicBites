@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import AdminNavbar from '../components/AdminNavbar';
 import { Clipboard, Star, MessageSquare, AlertCircle, Trash2 } from 'lucide-react';
 
+const apiBase = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+
 export default function AdminAnalytics({ adminToken }) {
   const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
@@ -29,11 +31,11 @@ export default function AdminAnalytics({ adminToken }) {
       const config = { headers: { Authorization: `Bearer ${adminToken}` } };
       
       // Fetch Orders to compute tallies
-      const ordersRes = await axios.get('http://localhost:5000/api/orders/admin/all', config);
+      const ordersRes = await axios.get(`${apiBase}/api/orders/admin/all`, config);
       setOrders(ordersRes.data || []);
 
       // Fetch Reviews
-      const feedbackRes = await axios.get('http://localhost:5000/api/feedback');
+      const feedbackRes = await axios.get(`${apiBase}/api/feedback`);
       setReviews(feedbackRes.data || []);
 
     } catch (err) {
@@ -54,7 +56,7 @@ export default function AdminAnalytics({ adminToken }) {
           Authorization: `Bearer ${token}`
         }
       };
-      await axios.delete(`http://localhost:5000/api/feedback/${reviewId}`, config);
+      await axios.delete(`${apiBase}/api/feedback/${reviewId}`, config);
       setReviews(prev => prev.filter(r => r._id !== reviewId));
     } catch (err) {
       setErrorMsg(err.response?.data?.message || 'Failed to remove review.');

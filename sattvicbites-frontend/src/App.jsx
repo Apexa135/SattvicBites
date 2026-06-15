@@ -20,6 +20,8 @@ import ReviewsPage from './pages/ReviewsPage';
 import PollPage from './pages/PollPage';
 import NotificationsPage from './pages/NotificationsPage';
 
+const apiBase = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+
 export default function App() {
   const [user, setUser] = useState(() => {
     try {
@@ -60,7 +62,7 @@ export default function App() {
   useEffect(() => {
     const fetchSettings = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/settings');
+        const res = await axios.get(`${apiBase}/api/settings`);
         setSettings(res.data);
       } catch (err) {
         console.error('Error fetching settings in root App:', err);
@@ -75,7 +77,7 @@ export default function App() {
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/notifications');
+        const res = await axios.get(`${apiBase}/api/notifications`);
         setNotifications(res.data || []);
       } catch (err) {
         console.error('Error fetching global notifications:', err);

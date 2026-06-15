@@ -17,9 +17,12 @@ connectDB();
 
 const app = express();
 
-// Configure CORS to permit frontend connectivity (Port 5173)
+// Configure CORS to permit frontend connectivity (Port 5173 and Render URL)
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: [
+    'http://localhost:5173',
+    'https://sattvicbites-frontend.onrender.com'
+  ],
   credentials: true
 }));
 

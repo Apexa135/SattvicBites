@@ -52,5 +52,57 @@ npm run build
 - **Result**: Success. All modules compiled successfully with no syntax warnings or import errors.
 - **Outputs**:
   - `dist/index.html` (1.32 kB)
-  - `dist/assets/index-Bm0UJ-i0.css` (39.16 kB)
-  - `dist/assets/index-CJptYJvg.js` (375.02 kB)
+  - `dist/assets/index-C-3gJ0bm.css` (49.30 kB)
+  - `dist/assets/index-BAUqygTm.js` (425.52 kB)
+
+---
+
+## 🚀 Render Deployment Fixes
+
+### 1. Unified Endpoint Configuration (Completed)
+- **Problem**: Previously, various frontend pages contained hardcoded `http://localhost:5000` endpoints in their Axios calls. When deployed to Render, these calls attempted to query a local port in the user's browser, resulting in connection failure and triggering the fallback error message `"Server error occurred during account registration."`.
+- **Solution**: We refactored all frontend components (including `App.jsx`, `Register.jsx`, `Login.jsx`, `AdminLogin.jsx`, etc.) to use a dynamic `apiBase` variable prefix:
+  `const apiBase = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';`
+  All Axios endpoint strings were converted to backtick literals using this prefix.
+
+### 2. CORS Whitelisting (Completed)
+- **Problem**: The backend whitelisted only `http://localhost:5173` for CORS requests, blocking connections from the production Render domain.
+- **Solution**: Updated `server.js` to whitelist the production URL:
+  ```javascript
+  app.use(cors({
+    origin: [
+      'http://localhost:5173',
+      'https://sattvicbites-frontend.onrender.com'
+    ],
+    credentials: true
+  }));
+  ```
+
+---
+
+## 📋 Steps to Make the Deployed Site Work (Manual Action Required)
+
+To make these changes active on your live Render site, follow these instructions:
+
+### Step A: Push Local Code Changes to GitHub
+Run the following commands in your project root terminal to push the local fixes to GitHub. Since Render auto-deploys from your repository, this will trigger a fresh build with the fixed code:
+```bash
+git add .
+git commit -m "chore: configure dynamic API endpoints and CORS whitelist for Render deployment"
+git push origin main
+```
+
+### Step B: Set Environment Variables on Render
+
+#### 1. Backend Web Service (`sattvicbites-backend`)
+Go to your Render Dashboard -> Select your Backend service -> Go to **Environment** tab and add:
+- `MONGO_URI` = `mongodb+srv://Apexa:9ATlXdig3aTMiize@cluster0.fgo9lzs.mongodb.net/sattvicbites?appName=Cluster0`
+- `JWT_SECRET` = `sattvic_bites_jwt_secret_token_key_987654321` (or your custom secret key)
+- `ADMIN_EMAIL` = `admin@sattvicbites.com`
+- `ADMIN_PASSWORD` = `admin123`
+
+#### 2. Frontend Static Site (`sattvicbites-frontend`)
+Go to your Render Dashboard -> Select your Frontend service -> Go to **Environment** tab and add:
+- `VITE_API_BASE_URL` = `https://sattvicbites-backend.onrender.com`
+- `VITE_MASTER_PASSKEY` = `sattvic_master_passkey_2026`
+
