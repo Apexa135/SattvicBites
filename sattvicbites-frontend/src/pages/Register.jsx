@@ -85,7 +85,7 @@ export default function Register({ onAuthSuccess }) {
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="e.g. Jinarth Gohil"
+              placeholder="e.g. Apexa Gohil"
               className="w-full bg-[#fdfbf4]/40 border border-[#e6d480]/40 rounded-xl px-3 py-2.5 text-sm text-brandNavy placeholder-slate-450 focus:bg-white focus:border-[#d97706] focus:ring-1 focus:ring-[#d97706] outline-none font-bold transition-all"
             />
           </div>
