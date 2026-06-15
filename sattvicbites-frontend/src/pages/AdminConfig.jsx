@@ -4,8 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import AdminNavbar from '../components/AdminNavbar';
 import { Shield, AlertCircle, CheckCircle, RefreshCw, Settings, Layers, Plus, Trash2, Clock, Volume2 } from 'lucide-react';
 
-const apiBase = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
-
 export default function AdminConfig({ adminToken }) {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -91,7 +89,7 @@ export default function AdminConfig({ adminToken }) {
       const config = { headers: { Authorization: `Bearer ${adminToken}` } };
       
       // Fetch Settings
-      const settingsRes = await axios.get(`${apiBase}/api/settings`);
+      const settingsRes = await axios.get('http://localhost:5000/api/settings');
       if (settingsRes.data) {
         setLunchOrderTime(settingsRes.data.lunchOrderTime || '08:00');
         setLunchCutoff(settingsRes.data.lunchCutoffTime || '10:00');
@@ -124,11 +122,11 @@ export default function AdminConfig({ adminToken }) {
       }
 
       // Fetch Polls
-      const pollRes = await axios.get(`${apiBase}/api/polls/admin`, config);
+      const pollRes = await axios.get('http://localhost:5000/api/polls/admin', config);
       setPolls(pollRes.data);
 
       // Fetch Notifications
-      const notificationRes = await axios.get(`${apiBase}/api/notifications/admin`, config);
+      const notificationRes = await axios.get('http://localhost:5000/api/notifications/admin', config);
       setNotifications(notificationRes.data);
 
     } catch (err) {
@@ -146,7 +144,7 @@ export default function AdminConfig({ adminToken }) {
     try {
       const config = { headers: { Authorization: `Bearer ${adminToken}` } };
       const payload = { dayRotis, daySabji, dayAccompaniment, dayImage };
-      await axios.put(`${apiBase}/api/settings`, payload, config);
+      await axios.put('http://localhost:5000/api/settings', payload, config);
       setSuccessMsg('Daytime Lunch Menu configuration updated successfully.');
       setLunchMenuSaved(true);
       setTimeout(() => {
@@ -165,7 +163,7 @@ export default function AdminConfig({ adminToken }) {
     try {
       const config = { headers: { Authorization: `Bearer ${adminToken}` } };
       const payload = { nightRotis, nightSabji, nightAccompaniment, nightImage };
-      await axios.put(`${apiBase}/api/settings`, payload, config);
+      await axios.put('http://localhost:5000/api/settings', payload, config);
       setSuccessMsg('Nighttime Dinner Menu configuration updated successfully.');
       setDinnerMenuSaved(true);
       setTimeout(() => {
@@ -184,7 +182,7 @@ export default function AdminConfig({ adminToken }) {
     try {
       const config = { headers: { Authorization: `Bearer ${adminToken}` } };
       const payload = { lunchRotisOptions, lunchSabjisOptions, lunchCustomOptions };
-      await axios.put(`${apiBase}/api/settings`, payload, config);
+      await axios.put('http://localhost:5000/api/settings', payload, config);
       setSuccessMsg('Lunch Dropdown Options updated successfully.');
       setLunchOptionsSaved(true);
       setTimeout(() => {
@@ -203,7 +201,7 @@ export default function AdminConfig({ adminToken }) {
     try {
       const config = { headers: { Authorization: `Bearer ${adminToken}` } };
       const payload = { dinnerRotisOptions, dinnerSabjisOptions, dinnerCustomOptions };
-      await axios.put(`${apiBase}/api/settings`, payload, config);
+      await axios.put('http://localhost:5000/api/settings', payload, config);
       setSuccessMsg('Dinner Dropdown Options updated successfully.');
       setDinnerOptionsSaved(true);
       setTimeout(() => {
@@ -222,7 +220,7 @@ export default function AdminConfig({ adminToken }) {
     try {
       const config = { headers: { Authorization: `Bearer ${adminToken}` } };
       const payload = { specialDishesOptions };
-      await axios.put(`${apiBase}/api/settings`, payload, config);
+      await axios.put('http://localhost:5000/api/settings', payload, config);
       setSuccessMsg('Special Dishes Options updated successfully.');
       setSpecialOptionsSaved(true);
       setTimeout(() => {
@@ -251,7 +249,7 @@ export default function AdminConfig({ adminToken }) {
         specialDishCutoffTime: specialDishCutoff,
         specialDishDailyLimit
       };
-      await axios.put(`${apiBase}/api/settings`, payload, config);
+      await axios.put('http://localhost:5000/api/settings', payload, config);
       setSuccessMsg('Time Cutoffs updated successfully.');
       setCutoffsSaved(true);
       setTimeout(() => {
@@ -288,7 +286,7 @@ export default function AdminConfig({ adminToken }) {
 
     try {
       const config = { headers: { Authorization: `Bearer ${adminToken}` } };
-      const res = await axios.post(`${apiBase}/api/polls/admin`, {
+      const res = await axios.post('http://localhost:5000/api/polls/admin', {
         question: newPollQuestion,
         options: filteredOptions
       }, config);
@@ -308,9 +306,9 @@ export default function AdminConfig({ adminToken }) {
     setSuccessMsg('');
     try {
       const config = { headers: { Authorization: `Bearer ${adminToken}` } };
-      await axios.put(`${apiBase}/api/polls/admin/${pollId}/toggle`, {}, config);
+      await axios.put(`http://localhost:5000/api/polls/admin/${pollId}/toggle`, {}, config);
       
-      const pollRes = await axios.get(`${apiBase}/api/polls/admin`, config);
+      const pollRes = await axios.get('http://localhost:5000/api/polls/admin', config);
       setPolls(pollRes.data);
       setSuccessMsg('Poll activation status updated.');
       setTimeout(() => setSuccessMsg(''), 3000);
@@ -325,7 +323,7 @@ export default function AdminConfig({ adminToken }) {
     setSuccessMsg('');
     try {
       const config = { headers: { Authorization: `Bearer ${adminToken}` } };
-      await axios.delete(`${apiBase}/api/polls/admin/${pollId}`, config);
+      await axios.delete(`http://localhost:5000/api/polls/admin/${pollId}`, config);
       setPolls(prev => prev.filter(p => p._id !== pollId));
       setSuccessMsg('Poll deleted.');
       setTimeout(() => setSuccessMsg(''), 3000);
@@ -347,7 +345,7 @@ export default function AdminConfig({ adminToken }) {
 
     try {
       const config = { headers: { Authorization: `Bearer ${adminToken}` } };
-      const res = await axios.post(`${apiBase}/api/notifications/admin`, {
+      const res = await axios.post('http://localhost:5000/api/notifications/admin', {
         message: newNotificationMessage,
         type: newNotificationType
       }, config);
@@ -366,7 +364,7 @@ export default function AdminConfig({ adminToken }) {
     setSuccessMsg('');
     try {
       const config = { headers: { Authorization: `Bearer ${adminToken}` } };
-      const res = await axios.put(`${apiBase}/api/notifications/admin/${id}/toggle`, {}, config);
+      const res = await axios.put(`http://localhost:5000/api/notifications/admin/${id}/toggle`, {}, config);
       setNotifications(prev => prev.map(n => n._id === id ? res.data : n));
       setSuccessMsg('Notification state updated.');
       setTimeout(() => setSuccessMsg(''), 3000);
@@ -381,7 +379,7 @@ export default function AdminConfig({ adminToken }) {
     setSuccessMsg('');
     try {
       const config = { headers: { Authorization: `Bearer ${adminToken}` } };
-      await axios.delete(`${apiBase}/api/notifications/admin/${id}`, config);
+      await axios.delete(`http://localhost:5000/api/notifications/admin/${id}`, config);
       setNotifications(prev => prev.filter(n => n._id !== id));
       setSuccessMsg('Notification removed.');
       setTimeout(() => setSuccessMsg(''), 3000);

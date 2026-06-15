@@ -3,8 +3,6 @@ import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import { Clock, Info, CheckCircle, Smartphone, AlertTriangle, Utensils } from 'lucide-react';
 
-const apiBase = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
-
 export default function OrderCustomizer({ user }) {
   const navigate = useNavigate();
 
@@ -106,7 +104,7 @@ export default function OrderCustomizer({ user }) {
   useEffect(() => {
     const fetchSettings = async () => {
       try {
-        const res = await axios.get(`${apiBase}/api/settings`);
+        const res = await axios.get('http://localhost:5000/api/settings');
         if (res.data) {
           setLunchCustomOptions(res.data.lunchCustomOptions || ['None']);
           setDinnerCustomOptions(res.data.dinnerCustomOptions || ['None']);
@@ -272,7 +270,7 @@ export default function OrderCustomizer({ user }) {
         }
       };
 
-      const response = await axios.post(`${apiBase}/api/orders`, payload, config);
+      const response = await axios.post('http://localhost:5000/api/orders', payload, config);
       
       // Update localStorage cached user object to include the new street address
       if (streetAddress && user) {

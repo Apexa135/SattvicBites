@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Clock, Info, ShieldAlert, CheckCircle, Smartphone, AlertTriangle, Vote, Star, Utensils, Heart } from 'lucide-react';
 
-const apiBase = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
-
 export default function Home({ user, setActiveTab }) {
   // State variables for Tiffin Form
   const [mealType, setMealType] = useState('Lunch');
@@ -58,7 +56,7 @@ export default function Home({ user, setActiveTab }) {
   // Fetch reviews list
   const fetchReviews = async () => {
     try {
-      const res = await axios.get(`${apiBase}/api/feedback`);
+      const res = await axios.get('http://localhost:5000/api/feedback');
       setReviews(res.data);
     } catch (err) {
       console.error('Error fetching reviews:', err);
@@ -173,7 +171,7 @@ export default function Home({ user, setActiveTab }) {
         }
       };
 
-      const response = await axios.post(`${apiBase}/api/orders`, payload, config);
+      const response = await axios.post('http://localhost:5000/api/orders', payload, config);
       
       setSuccessMsg(`Order successfully placed! Status: ${response.data.orderType === 'SpecialDish' ? 'Awaiting Kitchen Approval' : response.data.paymentStatus}`);
       setShowQRModal(false);
@@ -214,7 +212,7 @@ export default function Home({ user, setActiveTab }) {
         }
       };
 
-      const response = await axios.post(`${apiBase}/api/feedback`, {
+      const response = await axios.post('http://localhost:5000/api/feedback', {
         rating: userRating,
         comment: userComment
       }, config);

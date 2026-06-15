@@ -3,8 +3,6 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Shield, Key, AlertCircle, CheckCircle } from 'lucide-react';
 
-const apiBase = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
-
 export default function AdminLogin({ adminToken, setAdminToken, onAdminLogin }) {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
@@ -42,7 +40,7 @@ export default function AdminLogin({ adminToken, setAdminToken, onAdminLogin }) 
 
     try {
       const payload = { email, password };
-      const response = await axios.post(`${apiBase}/api/auth/login`, payload);
+      const response = await axios.post('http://localhost:5000/api/auth/login', payload);
 
       if (!response.data.isAdmin) {
         setErrorMsg('Authentication succeeded, but account lacks administrative clearance.');

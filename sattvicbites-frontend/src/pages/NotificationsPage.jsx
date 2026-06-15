@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Bell, Info, AlertTriangle, ShieldAlert } from 'lucide-react';
 
-const apiBase = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
-
 export default function NotificationsPage() {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -15,7 +13,7 @@ export default function NotificationsPage() {
   const fetchNotifications = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(`${apiBase}/api/notifications`);
+      const res = await axios.get('http://localhost:5000/api/notifications');
       setNotifications(res.data || []);
     } catch (err) {
       console.error('Error fetching notifications:', err);

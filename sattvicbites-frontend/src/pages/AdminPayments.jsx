@@ -4,8 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import AdminNavbar from '../components/AdminNavbar';
 import { CreditCard, Upload, CheckCircle, AlertCircle, RefreshCw, Folder, FolderOpen, DollarSign, IndianRupeeIcon } from 'lucide-react';
 
-const apiBase = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
-
 export default function AdminPayments({ adminToken }) {
   const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
@@ -41,10 +39,10 @@ export default function AdminPayments({ adminToken }) {
     try {
       const config = { headers: { Authorization: `Bearer ${adminToken}` } };
       
-      const res = await axios.get(`${apiBase}/api/orders/admin/all`, config);
+      const res = await axios.get('http://localhost:5000/api/orders/admin/all', config);
       setOrders(res.data || []);
 
-      const settingsRes = await axios.get(`${apiBase}/api/settings`);
+      const settingsRes = await axios.get('http://localhost:5000/api/settings');
       if (settingsRes.data && settingsRes.data.paymentQRCode) {
         setPaymentQRCode(settingsRes.data.paymentQRCode);
       }
@@ -73,7 +71,7 @@ export default function AdminPayments({ adminToken }) {
     setQrLoading(true);
     try {
       const config = { headers: { Authorization: `Bearer ${adminToken}` } };
-      await axios.put(`${apiBase}/api/settings`, { paymentQRCode }, config);
+      await axios.put('http://localhost:5000/api/settings', { paymentQRCode }, config);
       setQrSuccess('QR Code successfully uploaded and saved in settings.');
       setTimeout(() => setQrSuccess(''), 3000);
     } catch (err) {
@@ -89,7 +87,7 @@ export default function AdminPayments({ adminToken }) {
     setSuccessMsg('');
     try {
       const config = { headers: { Authorization: `Bearer ${adminToken}` } };
-      await axios.put(`${apiBase}/api/orders/admin/verify/${orderId}`, { status: 'Paid' }, config);
+      await axios.put(`http://localhost:5000/api/orders/admin/verify/${orderId}`, { status: 'Paid' }, config);
       
       setOrders(prev => prev.map(o => o._id === orderId ? { ...o, paymentStatus: 'Paid' } : o));
       setSuccessMsg('Payment successfully verified as Paid.');
