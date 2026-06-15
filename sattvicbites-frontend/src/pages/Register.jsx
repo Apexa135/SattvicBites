@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import { UserPlus, MapPin, AlertTriangle, Eye, EyeOff } from 'lucide-react';
 
+const apiBase = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+
 export default function Register({ onAuthSuccess }) {
   const navigate = useNavigate();
   const [name, setName] = useState('');
@@ -33,7 +35,7 @@ export default function Register({ onAuthSuccess }) {
 
     try {
       const payload = { name, email, password, city, pincode };
-      const response = await axios.post('http://localhost:5000/api/auth/register', payload);
+      const response = await axios.post(`${apiBase}/api/auth/register`, payload);
       
       setSuccessMsg('Account registered successfully! Redirecting...');
       localStorage.setItem('sattvicbites_user_token', response.data.token);

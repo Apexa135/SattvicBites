@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import { LogIn, Eye, EyeOff, ShieldCheck, AlertTriangle } from 'lucide-react';
 
+const apiBase = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+
 export default function Login({ onAuthSuccess }) {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
@@ -21,7 +23,7 @@ export default function Login({ onAuthSuccess }) {
 
     try {
       const payload = { email, password };
-      const response = await axios.post('http://localhost:5000/api/auth/login', payload);
+      const response = await axios.post(`${apiBase}/api/auth/login`, payload);
 
       setSuccessMsg('Logged in successfully! Redirecting...');
       localStorage.setItem('sattvicbites_user_token', response.data.token);

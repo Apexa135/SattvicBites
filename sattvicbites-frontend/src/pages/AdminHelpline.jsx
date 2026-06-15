@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import AdminNavbar from '../components/AdminNavbar';
 import { Phone, Link2, AlertCircle, CheckCircle, Save } from 'lucide-react';
 
+const apiBase = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+
 export default function AdminHelpline({ adminToken }) {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -30,7 +32,7 @@ export default function AdminHelpline({ adminToken }) {
     setLoading(true);
     setErrorMsg('');
     try {
-      const res = await axios.get('http://localhost:5000/api/settings');
+      const res = await axios.get(`${apiBase}/api/settings`);
       if (res.data) {
         setHelpline(res.data.helplineNumber || '');
         setCommunityLink(res.data.communityLink || '');
@@ -62,7 +64,7 @@ export default function AdminHelpline({ adminToken }) {
         additionalLinks
       };
 
-      await axios.put('http://localhost:5000/api/settings', payload, config);
+      await axios.put(`${apiBase}/api/settings`, payload, config);
       setSuccessMsg('Helplines and links configuration saved.');
       setIsSaved(true);
       setTimeout(() => {

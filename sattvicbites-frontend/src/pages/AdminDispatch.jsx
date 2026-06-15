@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import AdminNavbar from '../components/AdminNavbar';
 import { Compass, CheckCircle, AlertCircle, Sparkles, MapPin, ClipboardList, Folder, FolderOpen } from 'lucide-react';
 
+const apiBase = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+
 export default function AdminDispatch({ adminToken }) {
   const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
@@ -34,7 +36,7 @@ export default function AdminDispatch({ adminToken }) {
 
   const fetchCapacitySettings = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/settings');
+      const res = await axios.get(`${apiBase}/api/settings`);
       if (res.data) {
         setLunchDailyLimit(res.data.lunchDailyLimit || 20);
         setDinnerDailyLimit(res.data.dinnerDailyLimit || 20);
@@ -49,7 +51,7 @@ export default function AdminDispatch({ adminToken }) {
     setErrorMsg('');
     try {
       const config = { headers: { Authorization: `Bearer ${adminToken}` } };
-      const res = await axios.get('http://localhost:5000/api/orders/admin/all', config);
+      const res = await axios.get(`${apiBase}/api/orders/admin/all`, config);
       setOrders(res.data || []);
     } catch (err) {
       console.error(err);
@@ -65,7 +67,7 @@ export default function AdminDispatch({ adminToken }) {
     setSuccessMsg('');
     try {
       const config = { headers: { Authorization: `Bearer ${adminToken}` } };
-      await axios.put(`http://localhost:5000/api/orders/admin/approve/${orderId}`, { approvalStatus }, config);
+      await axios.put(`${apiBase}/api/orders/admin/approve/${orderId}`, { approvalStatus }, config);
       
       setOrders(prev => prev.map(o => o._id === orderId ? { ...o, adminApproval: approvalStatus } : o));
       setSuccessMsg(`Order has been successfully ${approvalStatus.toLowerCase()}.`);
@@ -83,7 +85,7 @@ export default function AdminDispatch({ adminToken }) {
     setSuccessMsg('');
     try {
       const config = { headers: { Authorization: `Bearer ${adminToken}` } };
-      await axios.put(`http://localhost:5000/api/orders/admin/deliver/${orderId}`, {}, config);
+      await axios.put(`${apiBase}/api/orders/admin/deliver/${orderId}`, {}, config);
       
       setOrders(prev => prev.map(o => o._id === orderId ? { ...o, isDelivered: true } : o));
       setSuccessMsg('Order marked as delivered and archived.');
@@ -108,7 +110,7 @@ export default function AdminDispatch({ adminToken }) {
     setSuccessMsg('');
     try {
       const config = { headers: { Authorization: `Bearer ${adminToken}` } };
-      const res = await axios.put('http://localhost:5000/api/orders/admin/deliver-all', { category }, config);
+      const res = await axios.put(`${apiBase}/api/orders/admin/deliver-all`, { category }, config);
       
       setSuccessMsg(res.data.message || 'Orders successfully marked as delivered.');
       fetchOrders(true);

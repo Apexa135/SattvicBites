@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Shield, Key, AlertCircle, CheckCircle, RefreshCw, Smartphone, Clipboard, Settings, Star, MessageSquare, Layers } from 'lucide-react';
 
+const apiBase = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+
 export default function AdminDashboard({ adminToken }) {
   const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
@@ -54,11 +56,11 @@ export default function AdminDashboard({ adminToken }) {
       };
 
       // 1. Fetch Orders
-      const orderRes = await axios.get('http://localhost:5000/api/orders/admin/all', config);
+      const orderRes = await axios.get(`${apiBase}/api/orders/admin/all`, config);
       setOrders(orderRes.data);
 
       // 2. Fetch Settings
-      const settingsRes = await axios.get('http://localhost:5000/api/settings');
+      const settingsRes = await axios.get(`${apiBase}/api/settings`);
       setLunchCutoff(settingsRes.data.lunchCutoffTime);
       setDinnerCutoff(settingsRes.data.dinnerCutoffTime);
       setTodaySabji(settingsRes.data.todaySabji || '');
@@ -67,15 +69,15 @@ export default function AdminDashboard({ adminToken }) {
       setDinnerCustomOptions(settingsRes.data.dinnerCustomOptions || []);
 
       // 3. Fetch Feedback Reviews
-      const feedbackRes = await axios.get('http://localhost:5000/api/feedback');
+      const feedbackRes = await axios.get(`${apiBase}/api/feedback`);
       setReviews(feedbackRes.data);
 
       // 4. Fetch All Polls (Admin only)
-      const pollRes = await axios.get('http://localhost:5000/api/polls/admin', config);
+      const pollRes = await axios.get(`${apiBase}/api/polls/admin`, config);
       setPolls(pollRes.data);
 
       // 5. Fetch All Notifications (Admin only)
-      const notificationRes = await axios.get('http://localhost:5000/api/notifications/admin', config);
+      const notificationRes = await axios.get(`${apiBase}/api/notifications/admin`, config);
       setNotifications(notificationRes.data);
 
     } catch (err) {
@@ -106,7 +108,7 @@ export default function AdminDashboard({ adminToken }) {
         dinnerCustomOptions
       };
 
-      await axios.put('http://localhost:5000/api/settings', payload, config);
+      await axios.put(`${apiBase}/api/settings`, payload, config);
       setSettingsSuccess('Dynamic time cutoffs updated successfully.');
       setTimeout(() => setSettingsSuccess(''), 4000);
     } catch (err) {
@@ -122,7 +124,7 @@ export default function AdminDashboard({ adminToken }) {
           Authorization: `Bearer ${adminToken}`
         }
       };
-      await axios.put(`http://localhost:5000/api/orders/admin/verify/${orderId}`, { status: 'Paid' }, config);
+      await axios.put(`${apiBase}/api/orders/admin/verify/${orderId}`, { status: 'Paid' }, config);
       setOrders(prev => prev.map(o => o._id === orderId ? { ...o, paymentStatus: 'Paid' } : o));
       setSuccessMsg('Payment successfully verified.');
       setTimeout(() => setSuccessMsg(''), 3000);
@@ -139,7 +141,7 @@ export default function AdminDashboard({ adminToken }) {
           Authorization: `Bearer ${adminToken}`
         }
       };
-      await axios.put(`http://localhost:5000/api/orders/admin/approve-special/${orderId}`, { approvalStatus }, config);
+      await axios.put(`${apiBase}/api/orders/admin/approve-special/${orderId}`, { approvalStatus }, config);
       setOrders(prev => prev.map(o => o._id === orderId ? { ...o, adminApproval: approvalStatus } : o));
       setSuccessMsg(`Special dish order successfully ${approvalStatus.toLowerCase()}.`);
       setTimeout(() => setSuccessMsg(''), 3000);
@@ -176,7 +178,7 @@ export default function AdminDashboard({ adminToken }) {
         options: optionsArray
       };
 
-      const res = await axios.post('http://localhost:5000/api/polls/admin', payload, config);
+      const res = await axios.post(`${apiBase}/api/polls/admin`, payload, config);
       setPolls(prev => [res.data, ...prev.map(p => ({ ...p, isActive: false }))]);
       setPollSuccess('New community poll published and activated.');
       setNewPollQuestion('');
@@ -195,7 +197,7 @@ export default function AdminDashboard({ adminToken }) {
           Authorization: `Bearer ${adminToken}`
         }
       };
-      const res = await axios.put(`http://localhost:5000/api/polls/admin/${pollId}/toggle`, {}, config);
+      const res = await axios.put(`${apiBase}/api/polls/admin/${pollId}/toggle`, {}, config);
       
       setPolls(prev => prev.map(p => {
         if (p._id === pollId) {
@@ -221,7 +223,7 @@ export default function AdminDashboard({ adminToken }) {
           Authorization: `Bearer ${adminToken}`
         }
       };
-      await axios.delete(`http://localhost:5000/api/polls/admin/${pollId}`, config);
+      await axios.delete(`${apiBase}/api/polls/admin/${pollId}`, config);
       setPolls(prev => prev.filter(p => p._id !== pollId));
       setSuccessMsg('Poll successfully deleted.');
       setTimeout(() => setSuccessMsg(''), 3000);
@@ -252,7 +254,7 @@ export default function AdminDashboard({ adminToken }) {
         type: newNotificationType
       };
 
-      const res = await axios.post('http://localhost:5000/api/notifications/admin', payload, config);
+      const res = await axios.post(`${apiBase}/api/notifications/admin`, payload, config);
       setNotifications(prev => [res.data, ...prev]);
       setNotificationSuccess('New notification broadcasted successfully.');
       setNewNotificationMessage('');
@@ -270,7 +272,7 @@ export default function AdminDashboard({ adminToken }) {
           Authorization: `Bearer ${adminToken}`
         }
       };
-      const res = await axios.put(`http://localhost:5000/api/notifications/admin/${id}/toggle`, {}, config);
+      const res = await axios.put(`${apiBase}/api/notifications/admin/${id}/toggle`, {}, config);
       setNotifications(prev => prev.map(n => n._id === id ? res.data : n));
       setSuccessMsg('Notification status toggled.');
       setTimeout(() => setSuccessMsg(''), 3000);
@@ -288,7 +290,7 @@ export default function AdminDashboard({ adminToken }) {
           Authorization: `Bearer ${adminToken}`
         }
       };
-      await axios.delete(`http://localhost:5000/api/notifications/admin/${id}`, config);
+      await axios.delete(`${apiBase}/api/notifications/admin/${id}`, config);
       setNotifications(prev => prev.filter(n => n._id !== id));
       setSuccessMsg('Notification deleted successfully.');
       setTimeout(() => setSuccessMsg(''), 3000);

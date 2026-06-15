@@ -3,6 +3,8 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { ClipboardList, RefreshCw, AlertTriangle, ShieldCheck } from 'lucide-react';
 
+const apiBase = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+
 export default function MyOrders({ user }) {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -19,7 +21,7 @@ export default function MyOrders({ user }) {
           Authorization: `Bearer ${token}`
         }
       };
-      const response = await axios.get('http://localhost:5000/api/orders/my-orders', config);
+      const response = await axios.get(`${apiBase}/api/orders/my-orders`, config);
       setOrders(response.data);
     } catch (err) {
       setErrorMsg(err.response?.data?.message || 'Error fetching order history.');

@@ -3,6 +3,8 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Clock, Heart, Check } from 'lucide-react';
 
+const apiBase = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+
 export default function Landing({ user }) {
   // Determine if it's currently day (Lunch: before 3 PM) or night (Dinner: after 3 PM)
   const [currentPeriod, setCurrentPeriod] = useState(() => new Date().getHours() < 15 ? 'Lunch' : 'Dinner');
@@ -31,7 +33,7 @@ export default function Landing({ user }) {
 
     const fetchMenuSettings = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/settings');
+        const res = await axios.get(`${apiBase}/api/settings`);
         if (res.data) {
           setDayRotis(res.data.dayRotis || '');
           setDaySabji(res.data.daySabji || '');
