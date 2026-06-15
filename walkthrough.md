@@ -96,10 +96,10 @@ git push origin main
 
 #### 1. Backend Web Service (`sattvicbites-backend`)
 Go to your Render Dashboard -> Select your Backend service -> Go to **Environment** tab and add:
-- `MONGO_URI` = `mongodb+srv://Apexa:9ATlXdig3aTMiize@cluster0.fgo9lzs.mongodb.net/sattvicbites?appName=Cluster0`
-- `JWT_SECRET` = `sattvic_bites_jwt_secret_token_key_987654321` (or your custom secret key)
+- `MONGO_URI` = `<your_mongodb_atlas_connection_string>`
+- `JWT_SECRET` = `<your_jwt_secret_key>`
 - `ADMIN_EMAIL` = `admin@sattvicbites.com`
-- `ADMIN_PASSWORD` = `admin123`
+- `ADMIN_PASSWORD` = `<your_admin_password>`
 
 #### 2. Frontend Static Site (`sattvicbites-frontend`)
 Go to your Render Dashboard -> Select your Frontend service -> Go to **Environment** tab and add:
